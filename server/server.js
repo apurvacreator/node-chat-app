@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-var {generateMessage} = require('./utils/message');
+var {generateMessage} = require('../public/js/utils/message');
 
 var publicPath = path.join(__dirname, '../public');
 var app = express();
@@ -25,10 +25,10 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log('createMessage', message);
         io.emit('newMessage', generateMessage(message.from, message.text));
-
+        callback('This is from the server');
         // socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
     });
 
